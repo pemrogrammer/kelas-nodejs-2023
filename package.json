@@ -4,7 +4,8 @@
   "description": "Belajar NodeJs dengan Framework ExpressJs",
   "main": "app.js",
   "scripts": {
-    "dev": "nodemon app"
+    "dev": "node app",
+    "dev-nodemon": "nodemon app"
   },
   "keywords": [
     "expressjs"
