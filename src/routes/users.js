@@ -76,11 +76,66 @@ router.get("/query", (req, res) => {
 // Routing menggunkan POST untuk menambahkan data baru
 // users/create
 router.post("/create", (req, res) => {
-  res.status(200).json({
+  const user = dataUsers.find((data) => data.name == req.body.name);
+
+  if (user) {
+    return res.status(200).json({
+      status: "error",
+      message: "Name already exists",
+      data: [],
+    });
+  }
+
+  const dataBaru = {
+    id: dataUsers.length + 1,
+    name: req.body.name,
+    grade: req.body.grade,
+  };
+
+  dataUsers.push(dataBaru);
+
+  return res.status(201).json({
     status: "success",
     message: "Data created",
-    data: req.body,
+    data: dataBaru,
   });
 });
+
+// Routing Menggunakan PATCH untuk mengubah data
+// users/update/:userId
+router.patch("/update/:userId", (req, res) => {
+  const index = dataUsers.findIndex((user) => user.id == req.params.userId);
+
+  if (index > -1) {
+    const user = dataUsers.find((data) => data.name == req.body.name);
+
+    if (user) {
+      return res.status(200).json({
+        status: "error",
+        message: "Name already exists",
+        data: [],
+      });
+    }
+
+    dataUsers[index].name = req.body.name;
+    dataUsers[index].grade = req.body.grade;
+
+    return res.status(200).json({
+      status: "success",
+      message: "Data updated",
+      data: dataUsers[index],
+    });
+  }
+
+  return res.status(404).json({
+    status: "error",
+    message: "Data not found",
+    data: [],
+  });
+});
+
+// Routing menggunakan DELETE untuk menghapus data
+// users/delete/:userId
+router.delete("/delete/:userId", (req, res) => {});
 
 module.exports = router;
