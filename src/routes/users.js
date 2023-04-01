@@ -136,6 +136,49 @@ router.patch("/update/:userId", (req, res) => {
 
 // Routing menggunakan DELETE untuk menghapus data
 // users/delete/:userId
-router.delete("/delete/:userId", (req, res) => {});
+router.delete("/delete/:userId", (req, res) => {
+  const index = dataUsers.findIndex((user) => user.id == req.params.userId);
+
+  if (index > -1) {
+    dataUsers.splice(index, 1);
+
+    return res.status(200).json({
+      status: "success",
+      message: "Data deleted",
+      data: dataUsers,
+    });
+  }
+
+  return res.status(404).json({
+    status: "error",
+    message: "User not found",
+    data: [],
+  });
+});
+
+router.delete("/delete-by-name/:username", (req, res) => {
+  const index = dataUsers.findIndex(
+    (user) => user.name.toLowerCase() == req.params.username.toLowerCase()
+  );
+  // const index = dataUsers.findIndex((user) =>
+  //   user.name.toLowerCase().includes(req.params.username.toLowerCase())
+  // );
+
+  if (index > -1) {
+    dataUsers.splice(index, 1);
+
+    return res.status(200).json({
+      status: "success",
+      message: "Data deleted",
+      data: dataUsers,
+    });
+  }
+
+  return res.status(404).json({
+    status: "error",
+    message: "User not found",
+    data: [],
+  });
+});
 
 module.exports = router;

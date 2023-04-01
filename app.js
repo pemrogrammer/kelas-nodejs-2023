@@ -5,6 +5,14 @@ const port = 8000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+const myLogger = function (req, res, next) {
+  //   console.log("LOGGED");
+  console.log(req.body);
+  next();
+};
+
+app.use(myLogger);
+
 // Routers
 const users = require("./src/routes/users");
 app.use("/users", users);
