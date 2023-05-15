@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const dataUsers = require("../constants/users");
+const middlerware = require("../middlerware");
 
 // users/
 router.get("/", (req, res) => {
@@ -58,7 +59,7 @@ router.get("/query", (req, res) => {
     user.name.toLowerCase().includes(req.query.name.toLowerCase())
   );
 
-  if (users) {
+  if (users.length !== 0) {
     return res.status(200).json({
       status: "success",
       message: "Data user found",
@@ -75,7 +76,7 @@ router.get("/query", (req, res) => {
 
 // Routing menggunkan POST untuk menambahkan data baru
 // users/create
-router.post("/create", (req, res) => {
+router.post("/create", middlerware.isAdministrator, (req, res) => {
   const user = dataUsers.find((data) => data.name == req.body.name);
 
   if (user) {
