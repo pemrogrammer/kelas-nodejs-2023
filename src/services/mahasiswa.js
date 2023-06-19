@@ -1,12 +1,33 @@
-const connection = require("../../database/connection");
+// const connection = require("../../database/connection");
 
-// TODO: need resolve
-async function getMahasiswa() {
-  return await connection.query("SELECT * FROM mahasiswa");
-}
+// // TODO: need resolve
+// async function getMahasiswa(params) {
+//   let results = {
+//     data: [],
+//     errors: [],
+//   };
+//   const data = await connection.execute(
+//     "SELECT * FROM mahasiswa",
+//     params,
+//     function (errors, rows) {
+//       if (errors)
+//         return (results = {
+//           data: [],
+//           errors,
+//         });
+//       else
+//         return (results = {
+//           data: rows,
+//           errors: [],
+//         });
+//     }
+//   );
 
-const mahasiswa = {
-  getMahasiswa,
-};
+//   return data;
+// }
 
-module.exports = mahasiswa;
+// const mahasiswaService = {
+//   getMahasiswa,
+// };
+
+// module.exports = mahasiswaService;
