@@ -37,6 +37,7 @@ router.get("/", async (req, res) => {
   });
 });
 
+// Create New Mahasiswa
 router.post("/create", async (req, res) => {
   const { nim, nama, jenis_kelamin, prodi, jurusan } = req.body;
 
@@ -67,6 +68,78 @@ router.post("/create", async (req, res) => {
           }
 
           return res.status(200).json({ status: "success", data: req.body });
+        }
+      );
+    }
+  );
+});
+
+// Detail Mahasiswa by NIM
+router.get("/show/:nim", async (req, res) => {
+  const { nim } = req.params;
+
+  connection.execute(
+    "SELECT * FROM mahasiswa WHERE nim = ?",
+    [atob(nim)],
+    function (errors, row) {
+      if (errors) {
+        console.log(errors);
+        return res.status(500).json({ status: "error" });
+      }
+
+      if (row.length > 0)
+        return res.status(200).json({ status: "success", data: row });
+
+      return res
+        .status(404)
+        .json({ status: "error", message: "Data tidak ditemukan." });
+    }
+  );
+});
+
+// Update Mahasiswa by NIM
+router.patch("/update/:nim", async (req, res) => {
+  const { nim } = req.params;
+  const { nama, jenis_kelamin, prodi, jurusan } = req.body;
+
+  connection.execute(
+    "SELECT * FROM mahasiswa WHERE nim = ?",
+    [atob(nim)],
+    function (errors, row) {
+      if (errors) {
+        console.log(errors);
+        return res.status(500).json({ status: "error" });
+      }
+
+      if (row.length === 0)
+        return res
+          .status(404)
+          .json({ status: "error", message: "Data tidak ditemukan." });
+
+      connection.execute(
+        "UPDATE mahasiswa SET nama = ?, jenis_kelamin = ?, prodi = ?, jurusan = ? WHERE nim = ?",
+        [
+          nama === "" ? row[0].nama : nama,
+          jenis_kelamin === "" ? row[0].jenis_kelamin : jenis_kelamin,
+          prodi === "" ? row[0].prodi : prodi,
+          jurusan === "" ? row[0].jurusan : jurusan,
+          atob(nim),
+        ],
+        function (error, result) {
+          if (error) {
+            console.log("ERROR", error);
+            return res.status(500).json({ status: "error" });
+          }
+
+          if (result.affectedRows === 1)
+            return res.status(200).json({
+              status: "success",
+              message: "Data berhasil diubah.",
+            });
+
+          return res
+            .status(500)
+            .json({ status: "error", message: "Data tidak dapat diubah." });
         }
       );
     }
